@@ -1,71 +1,10 @@
-\documentclass[final]{beamer}
-\usefonttheme{serif}
-\mode<presentation>{\usetheme{I6dv}}
-\usepackage{amsmath, amsfonts, amssymb, pxfonts, eulervm, xspace, enumerate, hyperref, color, bookmark}
-\usepackage{graphicx}
-\usepackage[orientation=landscape, size=a0, scale=1.4, debug]{beamerposter}
-% \usepackage{natbib}
-
-\usecolortheme{rose}
-%\setbeamercolor{background canvas}{bg=magenta!16!yellow!90}
-
-\beamertemplategridbackground[1cm]
-
-%-- Header and footer information ----------------------------------
-\newcommand{\footright}{\href{https://github.com/gdmosher/Poster-MSRIP1}{https://github.com/gdmosher/Poster-MSRIP1}}
-\newcommand{\footleft}{\href{mailto:thomas.girke@ucr.edu}{Faculty Advisor: Dr. Thomas Girke}}
-
-\def\conference{(MSRIP)}
-\title{Reproducible Research and Teaching in the Cloud}
-\author{\bf Gordon David Mosher and Thomas Girke} 
-\institute{\bf University of California, Riverside - Departments of Statistics and Bioinformatics}
-%-------------------------------------------------------------------
-
-
-%-- Main Document --------------------------------------------------
-\begin{document}
-\SweaveOpts{concordance=TRUE}
-\begin{frame}[fragile]
 \vspace{-2ex}
 \begin{columns}[t]
 
-<<label = "setup", comment = NA, echo = FALSE, message = FALSE, warning=FALSE>>=
-library(knitr)
-options(width = 35)
-opts_chunk$set(comment = NA, fig.align='center', fig.width=13, fig.height=6, cache=FALSE, warning = FALSE, message = FALSE)
-library(maps)
-library(ggplot2)
-library(PASWR)
-library(tree)
-library(randomForest)
-library(boot)
-library(xtable)
-library(ggmap)
-housedata <- read.csv("../Data/housedata.csv", 
-                      colClasses = c(id = "character", date = "character", 
-                                     yr_built = "character", zipcode = "factor", grade = "factor"))
-housedata$date <- as.Date(housedata$date, "%Y%m%d")
-housedata$waterfront <- factor(housedata$waterfront, labels = c("No", "Yes"))
-housedata$condition <- factor(housedata$condition, labels = c("poor", "fair", "average", "good", "very good"))
-housedata$yr_renovated <- ifelse(housedata$yr_renovated == 0, housedata$yr_built, housedata$yr_renovated)
-housedata$yr_built <- as.Date(ISOdate(housedata$yr_built, 9, 1))  # Complete Year, Sept 1
-housedata$yr_renovated <- as.Date(ISOdate(housedata$yr_renovated, 9, 1))  # Last renovated Year, Sept 1
-housedata <- housedata[, -1]
-housedataT <- read.csv("../Data/housedataTEST.csv",
-                      colClasses = c(id = "character", date = "character", 
-                                     yr_built = "character", zipcode = "factor", grade = "factor"))
-housedataT$date <- as.Date(housedataT$date, "%Y%m%d")
-housedataT$waterfront <- factor(housedataT$waterfront, labels = c("No", "Yes"))
-housedataT$condition <- factor(housedataT$condition, labels = c("poor", "fair", "average", "good", "very good"))
-housedataT$yr_renovated <- ifelse(housedataT$yr_renovated == 0, housedataT$yr_built, housedataT$yr_renovated)
-housedataT$yr_built <- as.Date(ISOdate(housedataT$yr_built, 9, 1))  # Complete Year, Sept 1
-housedataT$yr_renovated <- as.Date(ISOdate(housedataT$yr_renovated, 9, 1))  # Last renovated Year, Sept 1
-housedataT <- housedataT[, -1]
-@
 
 %-- Column 1 ---------------------------------------------------
 \begin{column}{0.31\linewidth}
-\begin{minipage}[t][1.000\textheight]{\linewidth} 
+\begin{minipage}[t][1.000\textheight]{\linewidth}
 
 %-- Block 1-1
 \vspace{0ex}
@@ -103,7 +42,7 @@ housedataT <- housedataT[, -1]
 
 Note: Variables are described in the Variable Table handout.
 \begin{enumerate}[a.]
-\item Model from applied to Training data (\textcolor{blue}{mod1A}) --- Percent voting for Amendment One is modeled using the predictors pct18.24, medinc, pctb, mccain08, evanrate, pctrural, and pctba. 
+\item Model from applied to Training data (\textcolor{blue}{mod1A}) --- Percent voting for Amendment One is modeled using the predictors pct18.24, medinc, pctb, mccain08, evanrate, pctrural, and pctba.
 \item Our OLS model applied to Training data (\textcolor{blue}{mod1B}) --- Percent voting for Amendment One is modeled using the predictors obama08, pctrural, pctw, pctd, pctb, log(pct18.24), log(pctcolenrol), pctfm, log(pctfd), pctown,  medinc, $\text{medinc}^2$, evanrate, $\text{evanrate}^2$, pctfb, $\text{pctfb}^2$, log(pctstud), and log(colden).
 \end{enumerate}
 \item Cross validated, $K = 10$, and pruned, $n_{\text{leaves}}=4$, regression tree {JF09} (\textcolor{blue}{mod2})
@@ -118,7 +57,7 @@ Note: Variables are described in the Variable Table handout.
 \vspace{0ex}
 \begin{block}{Abstract}
 \begin{itemize}
-\item On May 8, 2012, North Carolina voters approved Amendment One.  This poster examines four different models used to predict North Carolina county voting behavior.  
+\item On May 8, 2012, North Carolina voters approved Amendment One.  This poster examines four different models used to predict North Carolina county voting behavior.
 \item The data in this project is split into $K=10$ equal sized parts.  The cross-validation estimate of the prediction error is $$CV(\hat{f\,}\!)=\frac{1}{N}\sum_{i=1}^{N}L(y_i, \hat{f\,}\!^{-K(i)}(x_i)),$$
 where $\hat{f\,}\!^{-K}(x)$ denotes the fitted function with the $K$\textsuperscript{th} part of the data removed.
 \end{itemize}
@@ -132,7 +71,7 @@ where $\hat{f\,}\!^{-K}(x)$ denotes the fitted function with the $K$\textsupersc
 %-- Column 2 ---------------------------------------------------
 
 \begin{column}{0.31\linewidth}
-\begin{minipage}[t][.955\textheight]{\linewidth} 
+\begin{minipage}[t][.955\textheight]{\linewidth}
 
 %-- Block 2-1
 \vspace{0ex}
@@ -167,10 +106,42 @@ The result is a finished website, pdf, or journal article in less time and requi
 \vspace{0ex}
 \begin{block}{Methods}
 \vspace{0ex}
-<<label = "HIST", echo = FALSE, fig.width = 11, fig.height= 11>>=	
-iris[1:5,]
-print(summary(iris))
-@
+\begin{Schunk}
+\begin{Soutput}
+  Sepal.Length Sepal.Width
+1          5.1         3.5
+2          4.9         3.0
+3          4.7         3.2
+4          4.6         3.1
+5          5.0         3.6
+  Petal.Length Petal.Width Species
+1          1.4         0.2  setosa
+2          1.4         0.2  setosa
+3          1.3         0.2  setosa
+4          1.5         0.2  setosa
+5          1.4         0.2  setosa
+\end{Soutput}
+\begin{Soutput}
+  Sepal.Length    Sepal.Width
+ Min.   :4.300   Min.   :2.000
+ 1st Qu.:5.100   1st Qu.:2.800
+ Median :5.800   Median :3.000
+ Mean   :5.843   Mean   :3.057
+ 3rd Qu.:6.400   3rd Qu.:3.300
+ Max.   :7.900   Max.   :4.400
+  Petal.Length    Petal.Width
+ Min.   :1.000   Min.   :0.100
+ 1st Qu.:1.600   1st Qu.:0.300
+ Median :4.350   Median :1.300
+ Mean   :3.758   Mean   :1.199
+ 3rd Qu.:5.100   3rd Qu.:1.800
+ Max.   :6.900   Max.   :2.500
+       Species
+ setosa    :50
+ versicolor:50
+ virginica :50
+\end{Soutput}
+\end{Schunk}
 \vspace{0ex}
 \end{block}
 \vfill
@@ -179,14 +150,6 @@ print(summary(iris))
 \vspace{0ex}
 \begin{block}{King County Real Estate}
 \vspace{0ex}
-<<KCmap, echo = FALSE, fig.width = 12, fig.height = 12>>=
-KingMap <- get_map(location = c(lon = -122.1, lat = 47.48), zoom = 10, source = "google", maptype = "roadmap")
-ggmap(KingMap) +
-  geom_point(aes(x = long, y = lat, color = price), data = housedata,
- alpha = 1, size = .01) + scale_color_gradient(low = "purple", high = "black", limits = c(70000, 8000000)) +
-  ggtitle("Houses Sold in King County, Wa (2014-2015)") + 
-  labs(x = "longitude", y = "latitude")
-@
 \vspace{0ex}
 \end{block}
 \vfill
@@ -196,7 +159,7 @@ ggmap(KingMap) +
 
 %-- Column 3 ---------------------------------------------------
 \begin{column}{0.31\linewidth}
-\begin{minipage}[t][.955\textheight]{\linewidth} 
+\begin{minipage}[t][.955\textheight]{\linewidth}
 
 %-- Block 3-1
 \vspace{0ex}
@@ -204,7 +167,7 @@ ggmap(KingMap) +
 \begin{itemize}
 \item Simplifying the process of publication for scientists results in more productivity and better quality documents. The publication of scientific data is becoming a Data Science.
 \item Finding tools that automate publication are easy to find, but since technology is changing so rapidly, it may be difficult to determine which toolchains to adopt. The tools we currently recommend are free to use and can be installed in Windows, Linux or OS X.
-\item All computations and graphs are created with the open source software \texttt{R} \cite{R-base}. This poster was created using a scripted toolchain based on LaTeX, rather than a graphical layout program. 
+\item All computations and graphs are created with the open source software \texttt{R} \cite{R-base}. This poster was created using a scripted toolchain based on LaTeX, rather than a graphical layout program.
 \end{itemize}
 \vspace{0ex}
 \end{block}
@@ -240,16 +203,12 @@ ggmap(KingMap) +
 \footnotesize
 \setbeamertemplate{bibliography item}[text]
 \vspace{-1ex}
-<<auto-bib, version=packageVersion('knitr'), echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE>>=
-# write all packages in the current session to a bib file
-write_bib(c(.packages()), file = 'knitr-packages.bib')
-@
 
 \bibliographystyle{plain}  % can use plain but comment out natbib at top if using plain
 \bibliography{knitr-packages,poster}
 \normalsize
 \vfill
-\end{block} 
+\end{block}
 \vfill
 
 %-- Block 3-4
@@ -265,7 +224,7 @@ write_bib(c(.packages()), file = 'knitr-packages.bib')
 %--\end{figure}
 \vspace{0ex}
 \vfill
-\end{block} 
+\end{block}
 \vfill
 
 \end{minipage}
@@ -275,6 +234,3 @@ write_bib(c(.packages()), file = 'knitr-packages.bib')
 
 
 \end{columns}
-\end{frame}
-\end{document}
-
