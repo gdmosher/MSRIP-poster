@@ -21,6 +21,7 @@
 \institute{\bf University of California, Riverside - Departments of Statistics and Bioinformatics}
 %-------------------------------------------------------------------
 
+
 %-- Main Document --------------------------------------------------
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -40,6 +41,26 @@ library(randomForest)
 library(boot)
 library(xtable)
 library(ggmap)
+housedata <- read.csv("../Data/housedata.csv", 
+                      colClasses = c(id = "character", date = "character", 
+                                     yr_built = "character", zipcode = "factor", grade = "factor"))
+housedata$date <- as.Date(housedata$date, "%Y%m%d")
+housedata$waterfront <- factor(housedata$waterfront, labels = c("No", "Yes"))
+housedata$condition <- factor(housedata$condition, labels = c("poor", "fair", "average", "good", "very good"))
+housedata$yr_renovated <- ifelse(housedata$yr_renovated == 0, housedata$yr_built, housedata$yr_renovated)
+housedata$yr_built <- as.Date(ISOdate(housedata$yr_built, 9, 1))  # Complete Year, Sept 1
+housedata$yr_renovated <- as.Date(ISOdate(housedata$yr_renovated, 9, 1))  # Last renovated Year, Sept 1
+housedata <- housedata[, -1]
+housedataT <- read.csv("../Data/housedataTEST.csv",
+                      colClasses = c(id = "character", date = "character", 
+                                     yr_built = "character", zipcode = "factor", grade = "factor"))
+housedataT$date <- as.Date(housedataT$date, "%Y%m%d")
+housedataT$waterfront <- factor(housedataT$waterfront, labels = c("No", "Yes"))
+housedataT$condition <- factor(housedataT$condition, labels = c("poor", "fair", "average", "good", "very good"))
+housedataT$yr_renovated <- ifelse(housedataT$yr_renovated == 0, housedataT$yr_built, housedataT$yr_renovated)
+housedataT$yr_built <- as.Date(ISOdate(housedataT$yr_built, 9, 1))  # Complete Year, Sept 1
+housedataT$yr_renovated <- as.Date(ISOdate(housedataT$yr_renovated, 9, 1))  # Last renovated Year, Sept 1
+housedataT <- housedataT[, -1]
 @
 
 %-- Column 1 ---------------------------------------------------
@@ -52,6 +73,7 @@ library(ggmap)
 \begin{itemize}
 \item These days, science is increasingly supported by Data Science. Publishing of scientific data now requires technical skills often outside the realm of the researcher's expertise. This Data Science research project uses nearly twenty computer languages and file formats to move scientific data to the web, yet the end user need only enter a few commands to harness that power.
 \item Our research focuses on the automation of documentation tools. Existing documentation tools are connected by custom scripts to create nearly seamless paths for scientific data to reach various output formats. R is a very powerful statistical programming language and RStudio is its user friendly interface, thereby making R's power and interactive data analysis features accessible to scientists in any field. R has the ability to analyze data and create charts and graphs. Further, R will combine these results with markdown text to create complete documents ready for publication. Additional processing can be applied to create novel or specialized output formats.
+
 \end{itemize}
 \vspace{0ex}
 \end{block}
@@ -74,6 +96,32 @@ library(ggmap)
 \begin{figure}
 \includegraphics[width=\linewidth]{images/RStudio-Screenshot.png}
 \end{figure}
+
+\begin{enumerate}[I.]
+\item Least Squares Regression
+\vspace{0ex}
+
+Note: Variables are described in the Variable Table handout.
+\begin{enumerate}[a.]
+\item Model from applied to Training data (\textcolor{blue}{mod1A}) --- Percent voting for Amendment One is modeled using the predictors pct18.24, medinc, pctb, mccain08, evanrate, pctrural, and pctba. 
+\item Our OLS model applied to Training data (\textcolor{blue}{mod1B}) --- Percent voting for Amendment One is modeled using the predictors obama08, pctrural, pctw, pctd, pctb, log(pct18.24), log(pctcolenrol), pctfm, log(pctfd), pctown,  medinc, $\text{medinc}^2$, evanrate, $\text{evanrate}^2$, pctfb, $\text{pctfb}^2$, log(pctstud), and log(colden).
+\end{enumerate}
+\item Cross validated, $K = 10$, and pruned, $n_{\text{leaves}}=4$, regression tree {JF09} (\textcolor{blue}{mod2})
+\item Random Forest built from, $n_{\text{trees}} = 5000 $, {AL02} (\textcolor{blue}{mod3})
+\end{enumerate}
+\vspace{0ex}
+
+\end{block}
+\vfill
+
+%-- Block 1-1
+\vspace{0ex}
+\begin{block}{Abstract}
+\begin{itemize}
+\item On May 8, 2012, North Carolina voters approved Amendment One.  This poster examines four different models used to predict North Carolina county voting behavior.  
+\item The data in this project is split into $K=10$ equal sized parts.  The cross-validation estimate of the prediction error is $$CV(\hat{f\,}\!)=\frac{1}{N}\sum_{i=1}^{N}L(y_i, \hat{f\,}\!^{-K(i)}(x_i)),$$
+where $\hat{f\,}\!^{-K}(x)$ denotes the fitted function with the $K$\textsuperscript{th} part of the data removed.
+\end{itemize}
 \vspace{0ex}
 \end{block}
 \vfill
@@ -93,6 +141,7 @@ library(ggmap)
 \begin{figure}
 \includegraphics[width=0.98\linewidth]{images/RMarkdown.png}
 \end{figure}
+
 \vspace{0ex}
 \begin{figure}
 \includegraphics[width=0.98\linewidth]{images/RMarkdownOutput4way.png}
@@ -111,6 +160,34 @@ The result is a finished website, pdf, or journal article in less time and requi
 \item Our methods include support for reproducible research and teaching in the cloud. Reproducible research means that data, functions, code, and text are submitted to the tool and it will evaluate the data and publish the formatted results in the type of report selected. It also includes the ability to verify others work and expand upon it. Teaching in the cloud includes the development and automatic publication of online university courses using the same toolchains.
 \end{itemize}
 \vspace{2ex}
+\end{block}
+\vfill
+
+\vfill%-- Block 2-1
+\vspace{0ex}
+\begin{block}{Methods}
+\vspace{0ex}
+<<label = "HIST", echo = FALSE, fig.width = 11, fig.height= 11>>=	
+iris[1:5,]
+print(summary(iris))
+@
+\vspace{0ex}
+\end{block}
+\vfill
+
+%-- Block 2-2
+\vspace{0ex}
+\begin{block}{King County Real Estate}
+\vspace{0ex}
+<<KCmap, echo = FALSE, fig.width = 12, fig.height = 12>>=
+KingMap <- get_map(location = c(lon = -122.1, lat = 47.48), zoom = 10, source = "google", maptype = "roadmap")
+ggmap(KingMap) +
+  geom_point(aes(x = long, y = lat, color = price), data = housedata,
+ alpha = 1, size = .01) + scale_color_gradient(low = "purple", high = "black", limits = c(70000, 8000000)) +
+  ggtitle("Houses Sold in King County, Wa (2014-2015)") + 
+  labs(x = "longitude", y = "latitude")
+@
+\vspace{0ex}
 \end{block}
 \vfill
 
@@ -140,6 +217,9 @@ The result is a finished website, pdf, or journal article in less time and requi
 \begin{figure}
 \includegraphics[width=0.55\linewidth]{images/jekyll_github.png}
 \end{figure}
+%--<<fig=TRUE, echo = FALSE, fig.height = 4.5>>=
+%--hist(rnorm(1000), col = "green")
+%--@
 \vspace{0ex}
 \vfill
 \end{block}
@@ -164,6 +244,7 @@ The result is a finished website, pdf, or journal article in less time and requi
 # write all packages in the current session to a bib file
 write_bib(c(.packages()), file = 'knitr-packages.bib')
 @
+
 \bibliographystyle{plain}  % can use plain but comment out natbib at top if using plain
 \bibliography{knitr-packages,poster}
 \normalsize
@@ -190,6 +271,10 @@ write_bib(c(.packages()), file = 'knitr-packages.bib')
 \end{minipage}
 \end{column}%3
 
+
+
+
 \end{columns}
 \end{frame}
 \end{document}
+
